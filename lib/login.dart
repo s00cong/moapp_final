@@ -13,6 +13,82 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+
+void signInWithGoogle(BuildContext context) async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  await FirebaseAuth.instance.signInWithCredential(credential);
+
+  await FirebaseFirestore.instance
+      .collection('user')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .set(<String, dynamic>{
+    'email' : FirebaseAuth.instance.currentUser!.email.toString(),
+    'name' : FirebaseAuth.instance.currentUser!.displayName.toString(),
+
+    'uid' : FirebaseAuth.instance.currentUser!.uid.toString(),
+  });
+  // Once signed in, return the UserCredential
+  print(FirebaseAuth.instance.currentUser?.displayName);
+  if(FirebaseAuth.instance.currentUser!=null)
+    Navigator.pushNamed(context, '/home');
+
+
+  // return await FirebaseAuth.instance.signInWithCredential(credential);
+
+
+}
+
+
+// Example code of how to sign in anonymously.
+void signInAnonymously(BuildContext context) async {
+  try {
+
+    final userCredential =
+    await FirebaseAuth.instance.signInAnonymously();
+
+    print("Signed in with temporary account.");
+
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set(<String,dynamic>{
+      'uid' : FirebaseAuth.instance.currentUser!.uid.toString(),
+    })
+    ;
+
+  } on FirebaseAuthException catch (e) {
+    switch (e.code) {
+      case "operation-not-allowed":
+        print("Anonymous auth hasn't been enabled for this project.");
+        break;
+      default:
+        print("Unknown error.");
+    }
+  }
+  print(FirebaseAuth.instance.currentUser?.uid);
+
+  Navigator.pushNamed(context, '/home');
+}
+
+
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,9 +97,9 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+
+
 class _LoginPageState extends State<LoginPage> {
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +118,25 @@ class _LoginPageState extends State<LoginPage> {
                 const Text('   why not',  textScaleFactor: 1.5,),
                 const Text('Change your life?',  textScaleFactor: 1.5,),
                 SizedBox(height: 70.0),
+
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () async {
+
+                      signInWithGoogle(context);
+
+                    },
+                    child: const Text('Sign in with Google'),
+                  ),
+                ),
                 Image.asset('images/google.jpg', height: 70, width: 350),
-                Image.asset('images/kakao.jpg', height: 70, width: 350),
-                Image.asset('images/naver.jpg', height: 70, width: 350),
+
+                TextButton(onPressed: ()async {
+                  signInAnonymously(context);
+                }, child: const Text('Guest'),
+                )
               ],
 
             ),],
@@ -53,3 +145,5 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
+
