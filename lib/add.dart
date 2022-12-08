@@ -22,7 +22,7 @@ class ApplicationState extends ChangeNotifier {
 
   }
   Future<DocumentReference> addMessageToGuestBook
-      (String name, String price, String description, String img) {
+      (String name, String Day, String description, String img) {
 
     return
       FirebaseFirestore.instance
@@ -31,7 +31,7 @@ class ApplicationState extends ChangeNotifier {
           <String, dynamic>{
             'img': img,
             'name': name,
-            'price': int.parse(price),
+            'Day': int.parse(Day),
             'userid': FirebaseAuth.instance.currentUser!.uid,
             'description': description,
             'createTime': Timestamp.now().toString(),
@@ -55,8 +55,7 @@ class AddPageState extends State<AddPage> {
   File? image;
   PickedFile? pimage;
   final  name = TextEditingController();
-  final  price = TextEditingController();
-
+  final  Day = TextEditingController();
   final  description = TextEditingController();
   final picker = ImagePicker();
 
@@ -141,7 +140,7 @@ class AddPageState extends State<AddPage> {
                       <String, dynamic>{
                         'img': baseimg,
                         'name': name.text,
-                        'price': int.parse(price.text),
+                        'Day': int.parse(Day.text),
                         'userid': FirebaseAuth.instance.currentUser!.uid,
                         'description': description.text,
                         'createTime': DateTime.now().toString(),
@@ -167,7 +166,7 @@ class AddPageState extends State<AddPage> {
                         fit: BoxFit.cover,
                       ) :
                       Image.network(
-                        "http://handong.edu/site/handong/res/img/logo.png",
+                        "https://handong.edu/site/handong/res/img/logo.png",
                         width: MediaQuery.of(context).size.width,
                         height : 250,
                         fit: BoxFit.cover,
@@ -203,19 +202,19 @@ class AddPageState extends State<AddPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                TextFormField(
-                                  controller:name,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Product Name',
-                                  ),
-
-
-                                ),
+                                // TextFormField(
+                                //   controller:name,
+                                //   decoration: const InputDecoration(
+                                //     hintText: 'Product Name',
+                                //   ),
+                                //
+                                //
+                                // ),
 
                                 const SizedBox(height: 12.0,),
-                                TextFormField(controller:price,
+                                TextFormField(controller:Day,
                                   decoration: const InputDecoration(
-                                    hintText: 'Price',
+                                    hintText: '챌린지 N일차',
                                   ),
 
 

@@ -47,7 +47,7 @@ class HomePageState extends State<HomePage> {
     bottomNavigationBar: BottomNavigationBar(
 
     currentIndex: screenIndex,
-    items: [
+    items: const [
     BottomNavigationBarItem(icon: Icon(Icons.assured_workload_sharp), label: 'Challenge'),
     BottomNavigationBarItem(icon: Icon(Icons.collections), label: 'Chat'),
     BottomNavigationBarItem(icon: Icon(Icons.people), label: 'My')
