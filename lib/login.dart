@@ -47,7 +47,7 @@ void signInWithGoogle(BuildContext context) async {
   // Once signed in, return the UserCredential
   print(FirebaseAuth.instance.currentUser?.displayName);
   if(FirebaseAuth.instance.currentUser!=null)
-    Navigator.pushNamed(context, '/home');
+    Navigator.pushNamed(context, '/tappage');
 
 
   // return await FirebaseAuth.instance.signInWithCredential(credential);
@@ -84,7 +84,7 @@ void signInAnonymously(BuildContext context) async {
   }
   print(FirebaseAuth.instance.currentUser?.uid);
 
-  Navigator.pushNamed(context, '/home');
+  Navigator.pushNamed(context, '/tappage');
 }
 
 
@@ -131,7 +131,6 @@ class _LoginPageState extends State<LoginPage> {
                     child: const Text('Sign in with Google'),
                   ),
                 ),
-                Image.asset('images/google.jpg', height: 70, width: 350),
 
                 TextButton(onPressed: ()async {
                   signInAnonymously(context);
