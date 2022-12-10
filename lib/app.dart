@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:finalproject/profile.dart';
+import 'package:finalproject/table.dart';
 import 'package:flutter/material.dart';
 // import 'package:shrine/profile.dart';
 //
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/challenge': (context) => challenge(),
         '/tappage': (context) => TabPage(),
         '/profile': (context) => const ProfilePage(),
+        '/table' : (context) => TableCalendarScreen(),
 
 
       },
